@@ -8,7 +8,6 @@ from torchvision.models import resnet18
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-# hayakawadesu.
 
 # デバイスの設定
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
