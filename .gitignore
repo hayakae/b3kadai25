@@ -1,0 +1,14 @@
+# Ignore data directories
+data/
+jikken1/data/
+jikken2/data/
+
+# Ignore logs directory
+b3kadai25/logs/
+
+# Ignore specific files
+simclr_resnet18_epoch100.pt
+supervised_resnet18_epoch100.pt
+simclr_tsne.png
+supervised_tsne.png
+simclr.log
