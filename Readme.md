@@ -64,6 +64,23 @@ hayakawa/b3kadai bash
 
 ```
 
+
+6. コード実行後
+コンテナを削除
+```
+sudo docker ps -a
+sudo docker stop b3kadai
+sudo docker rm b3kadai
+sudo docker ps -a
+```
+イメージを削除
+```
+sudo docker images
+sudo docker images
+sudo docker rmi hayakawa/b3kadai
+sudo docker images
+```
+
 ## コードの実行
 
 ### 実験1
@@ -80,12 +97,23 @@ python jikken1/supervised.py
 python jikken1/supervised_tsne.py
 ```
 
-1. SimCLR
+2. SimCLR
 ```
 python jikken1/simclr.py
 ```
 可視化
 ```
 python jikken1/simclr_tsne.py
+```
+### 実験2
+CLIPのZeroshot性能をFood101データセットで検証します．プロンプトチューニングでより良い精度を目指してください．
+
+以下の箇所を自由に変更しましょう．
+```
+text_inputs = torch.cat([clip.tokenize(f"a photo of {c}") for c in dataset.classes]).to(device)
+```
+コードの実行
+```
+python jikken2/zeroshot.py
 ```
 
