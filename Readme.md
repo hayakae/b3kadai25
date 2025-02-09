@@ -66,6 +66,7 @@ hayakawa/b3kadai bash
 
 
 6. コード実行後
+
 コンテナを削除
 ```
 sudo docker ps -a
