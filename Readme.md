@@ -1,39 +1,61 @@
-# 提案手法
+# B3課題20205 対照学習
 
-## 環境
-(in laplace)
-- **Anaconda:**  
+## 環境構築
+Dockerを用いた環境構築を行います．
+
+1.
+2. Dockerhubからベースのイメージを取得
+
+以下のコマンドで，cuda12.4verのpytorchのイメージをダウンロードします．（cudaのverが違うかもしれないので， `nvidia-smi`でverを確認するとよいかも．）
 ```
-conda activate tf-gpu-env
+sudo docker pull pytorch/pytorch:2.4.0-cuda12.4-cudnn9-devel
 ```
-- **Docker**
-  
-1. Build & run 
+
+3. 構築したい環境のイメージを作成（Dockerfileを作成）
+   
+適当なディレクトリに/CustomImage/Dockerfileというテキストファイルを作成します．ファイルに以下の内容をコピペしましょう．
 ```
-sudo docker build -t sakurai/comp_rec -f /data/sakurai/nitori/Compatibility_Rec/Dockerfile /data/sakurai/nitori/Compatibility_Rec
+# CUDA 12.4対応のベースイメージを使用
+FROM pytorch/pytorch:2.4.0-cuda12.4-cudnn9-devel
+
+
+# os上での日本語のエラー防止
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
+
+
+# 必要なシステムパッケージとPythonパッケージのインストール
+RUN apt-get update && apt-get install -y \
+    python-is-python3 python3-pip && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* && \
+    pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir \
+        tqdm hydra-core==0.11.3 scikit-learn matplotlib ftfy regex numpy && \
+    pip install --no-cache-dir \
+    git+https://github.com/openai/CLIP.git
+
 ```
+
+4. イメージのビルド
+
+hayakawa/b3kadaというイメージが作成されます．名前とDockerファイルのパスは適宜変更してください．
 ```
-HostD=/data/sakurai/ && \
-ContainerD=/data/sakurai/ && \
+sudo docker build  -t hayakawa/b3kadai -f /home/user/code/CustomImage/Dockerfile /home/user/code/CustomImage
+```
+
+5. イメージからコンテナを起動
+
+イメージから，実際の動作環境であるコンテナを起動します．HostD, ContainerDのdirはb3kadaiのdirに合わせて，最終行は先ほどビルドしたイメージの名前に合わせて変更してください．
+```
+HostD=/home/user/code/b3kadai25 && \
+ContainerD=/home/user/code/b3kadai25 && \
 sudo docker run --gpus all -it \
 -v "${HostD}":"${ContainerD}" \
 -w "${ContainerD}" \
 --shm-size=16g \
---name sakurai_comp_rec \
-sakurai/comp_rec bash
+--name b3kadai \
+hayakawa/b3kadai bash
+
 ```
 
-The original code is available in the `laplace:/data/sakurai/nitori/Compatibility_Rec/PM_nitori_publish` directory.
 
-## Run the Codes
-
-To run the model, use the following command:
-
-```bash
-python3 model_nitori.py --train_mode [train_mode] --lambda_cl [lambda]
-```
-
-After running the scripts, the results will be saved in the `./result` directory.
-
-### Notes:
-- 
