@@ -3,7 +3,13 @@
 ## 環境構築
 Dockerを用いた環境構築を行います．
 
-1.
+1. コードのダウンロード
+
+このフォルダを適当な場所にダウンロードします．`cd`コマンドで落としたい場所に移動後，以下のコマンドを実行してください．
+```
+git clone https://github.com/hayakae/b3kadai25.git
+```
+
 2. Dockerhubからベースのイメージを取得
 
 以下のコマンドで，cuda12.4verのpytorchのイメージをダウンロードします．（cudaのverが違うかもしれないので， `nvidia-smi`でverを確認するとよいかも．）
@@ -58,4 +64,28 @@ hayakawa/b3kadai bash
 
 ```
 
+## コードの実行
+
+### 実験1
+教師あり学習，対照学習(SimCLR)それぞれで学習したモデルの画像特徴量（Cifar-10）をt-SNEで可視化する実験です．
+
+1. 教師あり学習
+
+両者ともエポック数は100で設定しました．自由に変えてもいいけどこのぐらいが適当かも．
+```
+python jikken1/supervised.py
+```
+回し終わったらモデルが保存されているので可視化を行います．
+```
+python jikken1/supervised_tsne.py
+```
+
+1. SimCLR
+```
+python jikken1/simclr.py
+```
+可視化
+```
+python jikken1/simclr_tsne.py
+```
 
