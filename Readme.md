@@ -76,7 +76,6 @@ sudo docker ps -a
 イメージを削除
 ```
 sudo docker images
-sudo docker images
 sudo docker rmi hayakawa/b3kadai
 sudo docker images
 ```
